@@ -28,8 +28,17 @@
 
 
 /* STUDENT APPLICATION */
+
+/*======= MODEL =======*/
+
+var model = {
+  attendanceRecord: localStorage.attendance
+};
+
+
 $(function() {
-    var attendance = JSON.parse(localStorage.attendance),
+
+    var attendance = JSON.parse(model.attendanceRecord),
         $allMissed = $('tbody .missed-col'),
         $allCheckboxes = $('tbody input');
 
@@ -77,7 +86,7 @@ $(function() {
         });
 
         countMissing();
-        localStorage.attendance = JSON.stringify(newAttendance);
+        model.attendanceRecord = JSON.stringify(newAttendance);
     });
 
     countMissing();
