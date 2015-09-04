@@ -59,6 +59,7 @@ var octopus = {
 	init: function() {
 		localStorage.clear(); //REMOVE THIS FOR FINAL
 		test();
+		view.addTable();
 	},
 
 	getStudentRecord:  function( studentName) {
@@ -67,14 +68,12 @@ var octopus = {
 
 	//count absences
 	countAbsences: function ( studentName ) {
-		//return function() {
 		var record = this.getStudentRecord( studentName );
 		var absences = 0;
 		for (var j = model.startDate; j <= model.endDate; j ++ ) {
 			if ( !record[ j ] ) {
 					absences ++;
 			}
-
 		} return absences;
 	}
 };
@@ -91,7 +90,7 @@ for (var i = 0; i < model.students.length; i++){
 		//		if ( student [])
 		//	}
 
-octopus.init();
+
 
 //octopus.countM();
 /*======= VIEW =======*/
@@ -100,7 +99,19 @@ var view = {
 	// TODO: use js to build page based on data instead of hard code
 	// TODO: update local storage
 	// TODO: update days missed on chart
+
+	//set up table
+	addTable: function() {
+		//Fill header row
+		for (var j = model.startDate; j <= model.endDate; j ++ ) {
+			$('#head-row .missed-col').before(' <th>' + j + '</th>');
+		};
+		//Add students
+
+	}
 }
+
+octopus.init();
 
 $(function() {
 
