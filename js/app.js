@@ -33,16 +33,67 @@
 
 var model = {
   attendance: JSON.parse(localStorage.attendance),
+  students: [ "Slappy the Frog", "Lilly the Lizard", "Paulrus the Walrus", "Gregory the Goat", "Adam the Anaconda" ],
+  startDate: 1,
+  endDate: 12,
+  days: function() {
+	  var dayArray = [];
+	  for (var i = this.startDate; i <= this.endDate; i++) {
+		  dayArray.push( i );
+	  };
+	  return dayArray;
+  },
   allMissed: $('tbody .missed-col'),
   allCheckboxes: $('tbody input')
   //TODO:  create obj for students using array of names and dates
 };
+//model.days();
+//console.log(model.attendance);
 
 /*======= OCTOPUS =======*/
 var octopus = {
 	// TODO: move init, count and update functions in here
-}
+	// Get student record from model
 
+	//Set things up
+	init: function() {
+		localStorage.clear(); //REMOVE THIS FOR FINAL
+		test();
+	},
+
+	getStudentRecord:  function( studentName) {
+		return model.attendance[ studentName ];
+	},
+
+	//count absences
+	countAbsences: function ( studentName ) {
+		//return function() {
+		var record = this.getStudentRecord( studentName );
+		var absences = 0;
+		for (var j = model.startDate; j <= model.endDate; j ++ ) {
+			if ( !record[ j ] ) {
+					absences ++;
+			}
+
+		} return absences;
+	}
+};
+
+test = function() {
+for (var i = 0; i < model.students.length; i++){
+	var studentName = model.students[ i ];
+	var fred = octopus.countAbsences(studentName);
+	console.log( studentName, octopus.getStudentRecord(studentName), fred);
+};
+};
+	//console.log(student);
+		//	for (var j = model.startDate; j <= model.endDate; j ++ ) {
+		//		if ( student [])
+		//	}
+
+octopus.init();
+
+//octopus.countM();
 /*======= VIEW =======*/
 
 var view = {
