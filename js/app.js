@@ -35,13 +35,21 @@ var model = {
   attendance: JSON.parse(localStorage.attendance),
   allMissed: $('tbody .missed-col'),
   allCheckboxes: $('tbody input')
-
+  //TODO:  create obj for students using array of names and dates
 };
 
 /*======= OCTOPUS =======*/
-
+var octopus = {
+	// TODO: move init, count and update functions in here
+}
 
 /*======= VIEW =======*/
+
+var view = {
+	// TODO: use js to build page based on data instead of hard code
+	// TODO: update local storage
+	// TODO: update days missed on chart
+}
 
 $(function() {
 
@@ -49,7 +57,7 @@ $(function() {
         $allMissed = $('tbody .missed-col'),
         $allCheckboxes = $('tbody input');*/
 
-    // Count a student's missed days
+    // Count a student's missed days  <-- MOVE TO OCTOPUS
     function countMissing() {
         model.allMissed.each(function() {
             var studentRow = $(this).parent('tr'),
@@ -66,7 +74,7 @@ $(function() {
         });
     }
 
-    // Check boxes, based on attendace records
+    // Check boxes, based on attendace records  <-- MOVE to VIEW
     $.each(model.attendance, function(name, days) {
         var studentRow = $('tbody .name-col:contains("' + name + '")').parent('tr'),
             dayChecks = $(studentRow).children('.attend-col').children('input');
@@ -76,7 +84,7 @@ $(function() {
         });
     });
 
-    // When a checkbox is clicked, update localStorage
+    // When a checkbox is clicked, update localStorage  <-- MOVE TO OCTOPUS
     model.allCheckboxes.on('click', function() {
         var studentRows = $('tbody .student'),
             newAttendance = {};
@@ -93,7 +101,7 @@ $(function() {
         });
 
         countMissing();
-        model.attendance = JSON.stringify(newAttendance);
+        model.attendance = JSON.stringify(newAttendance); //<-- MOVE TO OCTOPUS
     });
 
     countMissing();
