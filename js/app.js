@@ -32,19 +32,26 @@
 /*======= MODEL =======*/
 
 var model = {
-  attendanceRecord: localStorage.attendance
+  attendance: JSON.parse(localStorage.attendance),
+  allMissed: $('tbody .missed-col'),
+  allCheckboxes: $('tbody input')
+
 };
 
+/*======= OCTOPUS =======*/
+
+
+/*======= VIEW =======*/
 
 $(function() {
 
-    var attendance = JSON.parse(model.attendanceRecord),
+    /*var attendance = JSON.parse(model.attendanceRecord),
         $allMissed = $('tbody .missed-col'),
-        $allCheckboxes = $('tbody input');
+        $allCheckboxes = $('tbody input');*/
 
     // Count a student's missed days
     function countMissing() {
-        $allMissed.each(function() {
+        model.allMissed.each(function() {
             var studentRow = $(this).parent('tr'),
                 dayChecks = $(studentRow).children('td').children('input'),
                 numMissed = 0;
@@ -60,7 +67,7 @@ $(function() {
     }
 
     // Check boxes, based on attendace records
-    $.each(attendance, function(name, days) {
+    $.each(model.attendance, function(name, days) {
         var studentRow = $('tbody .name-col:contains("' + name + '")').parent('tr'),
             dayChecks = $(studentRow).children('.attend-col').children('input');
 
@@ -70,7 +77,7 @@ $(function() {
     });
 
     // When a checkbox is clicked, update localStorage
-    $allCheckboxes.on('click', function() {
+    model.allCheckboxes.on('click', function() {
         var studentRows = $('tbody .student'),
             newAttendance = {};
 
@@ -86,7 +93,7 @@ $(function() {
         });
 
         countMissing();
-        model.attendanceRecord = JSON.stringify(newAttendance);
+        model.attendance = JSON.stringify(newAttendance);
     });
 
     countMissing();
