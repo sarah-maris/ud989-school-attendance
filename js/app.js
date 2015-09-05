@@ -115,7 +115,8 @@ var view = {
 		var start = octopus.getDays.start;
 		var end = octopus.getDays.end;
 		var trStart = '<tr class="student"><td class="name-col">'
-		var trBox = '<td class="attend-col"><input type="checkbox"></td>';
+		var trBoxChecked = '<td class="attend-col"><input type="checkbox" checked="true"></td>';
+		var trBoxUnchecked = '<td class="attend-col"><input type="checkbox" ></td>';
 		var trEnd = '<td class="missed-col">';
 		var trAdd;
 		//Fill header row
@@ -123,12 +124,16 @@ var view = {
 			$('#head-row .missed-col').before(' <th>' + j + '</th>');
 		};
 		//Add students
-		$.each( attendanceList, function( name ) {
+		$.each( attendanceList, function( name, days ) {
 			//Student name
 			trAdd = trStart + name + '</td>';
 			//Checkbox for each day
 			for (var k = start; k <= end; k ++ ) {
-				trAdd += trBox;
+				if ( days[ k ]) { 
+					trAdd += trBoxChecked;
+				} else {
+					trAdd += trBoxUnchecked;
+				}
 			};
 			//Row end
 			trAdd += trEnd + octopus.countAbsences( name ) + '</td></tr>';
