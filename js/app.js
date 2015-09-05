@@ -32,28 +32,23 @@
 /*======= MODEL =======*/
 
 var model = {
+
   attendance: JSON.parse(localStorage.attendance),
+
   students: [ "Slappy the Frog", "Lilly the Lizard", "Paulrus the Walrus", "Gregory the Goat", "Adam the Anaconda" ],
+
   startDate: 1,
-  endDate: 12,
-  days: function() {
-	  var dayArray = [];
-	  for (var i = this.startDate; i <= this.endDate; i++) {
-		  dayArray.push( i );
-	  };
-	  return dayArray;
-  },
-  allMissed: $('tbody .missed-col'),
-  allCheckboxes: $('tbody input')
-  //TODO:  create obj for students using array of names and dates
+
+  endDate: 12
+
 };
-//model.days();
-//console.log(model.attendance);
+
 
 /*======= OCTOPUS =======*/
 var octopus = {
-	// TODO: move init, count and update functions in here
-	// Get student record from model
+	// TODO: add click function for check boxes
+	// TODO: update local storage for checks
+	// TODO: update days missed on chart
 
 	//Set things up
 	init: function() {
@@ -75,7 +70,7 @@ var octopus = {
 		end: model.endDate
 	},
 
-	//count absences
+	//Count absences
 	countAbsences: function ( studentName ) {
 		var record = this.getStudentRecord( studentName );
 		var absences = 0;
@@ -94,22 +89,12 @@ for (var i = 0; i < model.students.length; i++){
 	console.log( studentName, octopus.getStudentRecord(studentName), fred);
 };
 };
-	//console.log(student);
-		//	for (var j = model.startDate; j <= model.endDate; j ++ ) {
-		//		if ( student [])
-		//	}
 
-
-
-//octopus.countM();
 /*======= VIEW =======*/
 
 var view = {
-	// TODO: use js to build page based on data instead of hard code
-	// TODO: update local storage
-	// TODO: update days missed on chart
 
-	//set up table
+	//Set up table
 	addTable: function() {
 		var attendanceList = octopus.getClassAttendance();
 		var start = octopus.getDays.start;
@@ -147,13 +132,12 @@ octopus.init();
 
 $(function() {
 
-    /*var attendance = JSON.parse(model.attendanceRecord),
-        $allMissed = $('tbody .missed-col'),
-        $allCheckboxes = $('tbody input');*/
+  $allMissed = $('tbody .missed-col'); //NOT NEEDED FOR FINAL
+  $allCheckboxes = $('tbody input');  // NOT NEEDED FOR FINAL
 
     // Count a student's missed days  <-- MOVE TO OCTOPUS
     function countMissing() {
-        model.allMissed.each(function() {
+       $allMissed.each(function() {
             var studentRow = $(this).parent('tr'),
                 dayChecks = $(studentRow).children('td').children('input'),
                 numMissed = 0;
@@ -179,7 +163,7 @@ $(function() {
     });
 
     // When a checkbox is clicked, update localStorage  <-- MOVE TO OCTOPUS
-    model.allCheckboxes.on('click', function() {
+    $allCheckboxes.on('click', function() {
         var studentRows = $('tbody .student'),
             newAttendance = {};
 
