@@ -80,7 +80,7 @@ var octopus = {
 		var record = this.getStudentRecord( studentName );
 		var absences = 0;
 		for (var j = model.startDate; j <= model.endDate; j ++ ) {
-			if ( !record[ j ] ) {
+			if ( !record[ j - 1 ] ) {
 					absences ++;
 			}
 		} return absences;
@@ -129,7 +129,7 @@ var view = {
 			trAdd = trStart + name + '</td>';
 			//Checkbox for each day
 			for (var k = start; k <= end; k ++ ) {
-				if ( days[ k ]) { 
+				if ( days[ k - 1 ]) {
 					trAdd += trBoxChecked;
 				} else {
 					trAdd += trBoxUnchecked;
