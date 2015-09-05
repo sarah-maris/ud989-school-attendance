@@ -62,8 +62,17 @@ var octopus = {
 		view.addTable();
 	},
 
-	getStudentRecord:  function( studentName) {
+	getClassAttendance: function () {
+		return model.attendance;
+	},
+
+	getStudentRecord:  function( studentName ) {
 		return model.attendance[ studentName ];
+	},
+
+	getDays: {
+		start: model.startDate,
+		end: model.endDate
 	},
 
 	//count absences
@@ -102,11 +111,29 @@ var view = {
 
 	//set up table
 	addTable: function() {
+		var attendanceList = octopus.getClassAttendance();
+		var start = octopus.getDays.start;
+		var end = octopus.getDays.end;
+		var trStart = '<tr class="student"><td class="name-col">'
+		var trBox = '<td class="attend-col"><input type="checkbox"></td>';
+		var trEnd = '<td class="missed-col">0</td></tr>'
+		var trAdd;
 		//Fill header row
-		for (var j = model.startDate; j <= model.endDate; j ++ ) {
+		for (var j = start; j <= end; j ++ ) {
 			$('#head-row .missed-col').before(' <th>' + j + '</th>');
 		};
 		//Add students
+		$.each( attendanceList, function( name ) {
+			//Student name
+			trAdd = trStart + name + '</td>';
+			//Checkbox for each day
+			for (var k = start; k <= end; k ++ ) {
+				trAdd += trBox;
+			};
+			//Row end
+			trAdd += trEnd
+			$( '#student-data' ).append( trAdd );
+		});
 
 	}
 }
