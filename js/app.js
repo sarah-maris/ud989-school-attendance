@@ -70,6 +70,11 @@ var octopus = {
 		end: model.endDate
 	},
 
+	clickBox: function(e){
+		console.log(e);
+		console.log ( e.data.name, e.data.m );
+	},
+
 	//Count absences
 	countAbsences: function ( studentName ) {
 		var record = this.getStudentRecord( studentName );
@@ -82,49 +87,65 @@ var octopus = {
 	}
 };
 
+showStudent = function (studentName){
+	console.log( "show: ", studentName, octopus.getStudentRecord(studentName), octopus.countAbsences(studentName));
+};
+
 test = function() {
-for (var i = 0; i < model.students.length; i++){
-	var studentName = model.students[ i ];
-	var fred = octopus.countAbsences(studentName);
-	console.log( studentName, octopus.getStudentRecord(studentName), fred);
+	for (var i = 0; i < model.students.length; i++){
+		var studentName = model.students[ i ];
+		showStudent(studentName);
+	};
 };
-};
+
 
 /*======= VIEW =======*/
 
 var view = {
 
-	//Set up table
+	//Show data table
 	addTable: function() {
 		var attendanceList = octopus.getClassAttendance();
 		var start = octopus.getDays.start;
 		var end = octopus.getDays.end;
 		var trStart = '<tr class="student"><td class="name-col">'
-		var trBoxChecked = '<td class="attend-col"><input type="checkbox" checked="true"></td>';
-		var trBoxUnchecked = '<td class="attend-col"><input type="checkbox" ></td>';
+		var boxStart = '<td class="attend-col"><input type="checkbox" id="'
+		var checkedEnd ='" checked></td>';
+		var uncheckedEnd = '" ></td>';
 		var trEnd = '<td class="missed-col">';
-		var trAdd;
+		var stuNum = 1;
+		var trAdd, boxID;
+
 		//Fill header row
 		for (var j = start; j <= end; j ++ ) {
 			$('#head-row .missed-col').before(' <th>' + j + '</th>');
 		};
+
 		//Add students
 		$.each( attendanceList, function( name, days ) {
 			//Student name
 			trAdd = trStart + name + '</td>';
 			//Checkbox for each day
 			for (var k = start; k <= end; k ++ ) {
+				boxID = "box-" + stuNum + "-" + k;
 				if ( days[ k - 1 ]) {
-					trAdd += trBoxChecked;
+					trAdd += boxStart + boxID + checkedEnd;
 				} else {
-					trAdd += trBoxUnchecked;
+					trAdd += boxStart + boxID + uncheckedEnd;
 				}
 			};
 			//Row end
 			trAdd += trEnd + octopus.countAbsences( name ) + '</td></tr>';
 			$( '#student-data' ).append( trAdd );
-		});
 
+			//Add click events
+			for (var m = start; m <= end; m ++ ) {
+				boxID = "#box-" + stuNum + "-" + m;
+				$( boxID ).click( { name: name, m: m }, octopus.clickBox );
+			};
+
+			stuNum ++;
+		});
 	}
 }
 
@@ -135,7 +156,7 @@ $(function() {
   $allMissed = $('tbody .missed-col'); //NOT NEEDED FOR FINAL
   $allCheckboxes = $('tbody input');  // NOT NEEDED FOR FINAL
 
-    // Count a student's missed days  <-- MOVE TO OCTOPUS
+    // Count a student's missed days  <-- MOVED TO OCTOPUS
     function countMissing() {
        $allMissed.each(function() {
             var studentRow = $(this).parent('tr'),
@@ -152,7 +173,7 @@ $(function() {
         });
     }
 
-    // Check boxes, based on attendace records  <-- MOVE to VIEW
+    // Check boxes, based on attendace records  <-- MOVED to VIEW
     $.each(model.attendance, function(name, days) {
         var studentRow = $('tbody .name-col:contains("' + name + '")').parent('tr'),
             dayChecks = $(studentRow).children('.attend-col').children('input');
