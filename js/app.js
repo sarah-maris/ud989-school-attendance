@@ -116,7 +116,7 @@ var view = {
 		var end = octopus.getDays.end;
 		var trStart = '<tr class="student"><td class="name-col">'
 		var trBox = '<td class="attend-col"><input type="checkbox"></td>';
-		var trEnd = '<td class="missed-col">0</td></tr>'
+		var trEnd = '<td class="missed-col">';
 		var trAdd;
 		//Fill header row
 		for (var j = start; j <= end; j ++ ) {
@@ -131,7 +131,7 @@ var view = {
 				trAdd += trBox;
 			};
 			//Row end
-			trAdd += trEnd
+			trAdd += trEnd + octopus.countAbsences( name ) + '</td></tr>';
 			$( '#student-data' ).append( trAdd );
 		});
 
