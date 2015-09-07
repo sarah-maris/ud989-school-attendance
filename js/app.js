@@ -58,13 +58,9 @@ var model = {
 
 /*======= OCTOPUS =======*/
 var octopus = {
-	// TODO: update local storage for checks
-	// TODO: update days missed on chart
 
-	//Set things up
+	//Show table
 	init: function() {
-	//	localStorage.clear(); //REMOVE THIS FOR FINAL
-		test();
 		view.addTable();
 	},
 
@@ -86,17 +82,19 @@ var octopus = {
 	clickBox: function(e){
 		var clickName = e.data.clickName;
 		var clickDay = e.data.clickDay;
-		var clickRecord = e.data.clickRecord;
+		var num = e.data.clickNum;
 		var clickCheck = model.attendance[ clickName ][ clickDay ];
 		var newAttendance = model.attendance;
-		console.log ( clickName, clickDay, clickCheck );
-				console.log ( clickCheck, model.attendance[ clickName ][ clickDay ]);
+
+	console.log ( clickName, clickDay, clickCheck );
+				//console.log ( clickCheck, model.attendance[ clickName ][ clickDay ]);
 		if ( clickCheck ) {
 			newAttendance[ clickName ][ clickDay ] = false;
 		} else {
 			newAttendance[ clickName ][ clickDay ] = true;
 		}
 		localStorage.attendance = JSON.stringify(newAttendance);
+		view.updateAbsences( clickName, num );
 		
 	},
 
@@ -112,25 +110,13 @@ var octopus = {
 	}
 };
 
-showStudent = function (studentName){
-	console.log( "show: ", studentName, octopus.getStudentRecord(studentName), octopus.countAbsences(studentName));
-};
-
-test = function() {
-	for (var i = 0; i < model.studentNames.length; i++){
-		var studentName = model.studentNames[ i ];
-		showStudent(studentName);
-	};
-};
-
-
 /*======= VIEW =======*/
 
 var view = {
 
 	//Show data table
 	addTable: function() {
-		var attendanceList = octopus.getClassAttendance(); // Really needed?
+		//var attendanceList = octopus.getClassAttendance(); // Really needed?
 		var students = octopus.getStudents;
 		var start = octopus.getDays.start;
 		var end = octopus.getDays.end;
@@ -153,9 +139,9 @@ var view = {
 			//Student name
 			name = students[ n ].name;
 			stuNum = students[ n ].num ;
-			console.log(stuNum);
+	//	console.log(stuNum);
 			stuRecord = octopus.getStudentRecord( name );
-			console.log( name, stuNum, stuRecord );
+	//	console.log( name, stuNum, stuRecord );
 			trAdd = trStart + name + '</td>';
 			//Checkbox for each day
 			for (var k = start - 1; k < end; k ++ ) {
@@ -172,16 +158,17 @@ var view = {
 			$( '#student-data' ).append( trAdd );
 
 			//Add click events
-			for (var m = start; m <= end; m ++ ) {
+			for (var m = start - 1; m < end; m ++ ) {
 				boxID = "#box-" + stuNum + "-" + m;
-				boxRecord = attendanceList[ name ];
-				//console.log (boxRecord);
-				$(document).on('click', boxID, { clickName: name, clickDay: m - 1, clickRecord: boxRecord  }, octopus.clickBox );
-
-				//$( boxID ).click( { name: name, m: m }, octopus.clickBox );
+				$(document).on('click', boxID, { clickName: name, clickDay: m, clickNum: stuNum }, octopus.clickBox );
 			};
 			stuNum ++;
 		};
+	},
+	
+	updateAbsences: function ( name, num ) {
+		var missing = octopus.countAbsences( name );
+		$('#missed-' + num ).html( missing );
 	}
 }
 
