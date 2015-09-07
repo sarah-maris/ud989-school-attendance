@@ -1,8 +1,4 @@
-/* STUDENTS IGNORE THIS FUNCTION
- * All this does is create an initial
- * attendance record if one is not found
- * within localStorage.
- */
+/*======== Revised attendance function ==============================*/
 (function() {
     if (!localStorage.attendance) {
         console.log('Creating attendance records...');
@@ -10,22 +6,22 @@
             return (Math.random() >= 0.5);
         }
 
-        var nameColumns = $('tbody .name-col'),
-            attendance = {};
+        var attendance = {};
+		var names = [ "Slappy the Frog", "Lilly the Lizard", "Paulrus the Walrus", "Gregory the Goat", "Adam the Anaconda" ];
 
-        nameColumns.each(function() {
-            var name = this.innerText;
+        for (var n = 0; n < names.length ; n ++ ){
+            var name = names[ n ];
             attendance[name] = [];
 
             for (var i = 0; i <= 11; i++) {
                 attendance[name].push(getRandom());
             }
-        });
+        };
 
         localStorage.attendance = JSON.stringify(attendance);
+
     }
 }());
-
 
 /* STUDENT APPLICATION */
 
@@ -39,8 +35,6 @@ var model = {
 
   studentData: function( names ) {
 	  var studentsArray = [];
-
-
 	  for (var n = 0; n < names.length; n++ ) {
 		  var student = {};
 		  student.name = names[ n ];
